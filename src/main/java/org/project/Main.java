@@ -1,7 +1,6 @@
 package org.project;
 
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class Main {
     static final Scanner scanner = new Scanner(System.in);
@@ -56,7 +55,7 @@ public class Main {
             return formatHexNumber(builder);
         }
 
-        return reverseString(builder.toString());
+        return builder.reverse().toString();
     }
 
     private static String formatHexNumber(StringBuilder builder) {
@@ -69,15 +68,7 @@ public class Main {
         numberString = numberString.replaceAll("14", "E");
         numberString = numberString.replaceAll("15", "F");
 
-        return reverseString(numberString);
+        return new StringBuilder(numberString).reverse().toString();
     }
 
-    private static String reverseString(String string) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = string.length() - 1; i >= 0; i--) {
-            builder.append(string.charAt(i));
-        }
-
-        return builder.toString();
-    }
 }
