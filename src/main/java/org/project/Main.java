@@ -7,11 +7,14 @@ public class Main {
 
     public static void main(String[] args) {
 
+        userAction();
     }
 
     private static void userAction() {
         int decimalNumber = getDecimalNumberInput();
         int targetBase = getTargetBaseInput();
+
+        System.out.println(convertDecimalToTargetBase(decimalNumber, targetBase));
     }
 
     private static int getDecimalNumberInput() {
