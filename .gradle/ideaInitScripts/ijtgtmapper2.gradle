@@ -1,0 +1,5 @@
+ext.pathMapper = [:]
+ext.pathMapper.put('//wsl\$/Ubuntu/home/mclilzee/.jdks/corretto-17.0.4/bin/java', '/home/mclilzee/.jdks/corretto-17.0.4/bin/java')
+ext.pathMapper.put('//wsl\$/Ubuntu/home/mclilzee/repo/number-base-converter', '/home/mclilzee/repo/number-base-converter')
+ext.pathMapper.put("<<target java executable path>>", '/home/mclilzee/.jdks/corretto-17.0.4/bin/java')
+ext.mapPath = { path -> pathMapper.get(path) ?: path }

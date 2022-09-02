@@ -1,6 +1,7 @@
 package org.project;
 
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Main {
     static final Scanner scanner = new Scanner(System.in);
@@ -44,7 +45,7 @@ public class Main {
         }
     }
 
-    private static int convertDecimalToTargetBase(int decimal, int targetBase) {
+    private static String convertDecimalToTargetBase(int decimal, int targetBase) {
         StringBuilder builder = new StringBuilder();
         while (decimal > 0) {
             builder.append(decimal % targetBase);
@@ -55,16 +56,28 @@ public class Main {
             return formatHexNumber(builder);
         }
 
-        return Integer.parseInt(builder.toString());
+        return builder.toString();
     }
 
-    private static int formatHexNumber(StringBuilder builder) {
-        String number = builder.toString();
+    private static String formatHexNumber(StringBuilder builder) {
+        String numberString = builder.toString();
 
-        for (int i = 0; i < 6; i++) {
-            number = number.replace("" + 10 + i, 'A' + 1 + "");
+        numberString = numberString.replaceAll("10", "A");
+        numberString = numberString.replaceAll("11", "B");
+        numberString = numberString.replaceAll("12", "C");
+        numberString = numberString.replaceAll("13", "D");
+        numberString = numberString.replaceAll("14", "E");
+        numberString = numberString.replaceAll("15", "F");
+
+        return reverseString(numberString);
+    }
+
+    private static String reverseString(String string) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = string.length() - 1; i >= 0; i--) {
+            builder.append(string.charAt(i));
         }
 
-        return Integer.parseInt(number);
+        return builder.toString();
     }
 }
