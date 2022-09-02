@@ -14,6 +14,7 @@ public class Main {
         int decimalNumber = getDecimalNumberInput();
         int targetBase = getTargetBaseInput();
 
+        System.out.print("Conversion result: ");
         System.out.println(convertDecimalToTargetBase(decimalNumber, targetBase));
     }
 
@@ -32,7 +33,7 @@ public class Main {
 
     private static int getTargetBaseInput() {
         while (true) {
-            System.out.println("Enter target base: ");
+            System.out.print("Enter target base: ");
             String input = scanner.nextLine();
 
             if ("2".equals(input) || "8".equals(input) || "16".equals(input)) {
@@ -43,7 +44,7 @@ public class Main {
         }
     }
 
-    private static String convertDecimalToTargetBase(int decimal, int targetBase) {
+    private static int convertDecimalToTargetBase(int decimal, int targetBase) {
         StringBuilder builder = new StringBuilder();
         while (decimal > 0) {
             builder.append(decimal % targetBase);
@@ -54,16 +55,16 @@ public class Main {
             return formatHexNumber(builder);
         }
 
-        return builder.toString();
+        return Integer.parseInt(builder.toString());
     }
 
-    private static String formatHexNumber(StringBuilder builder) {
+    private static int formatHexNumber(StringBuilder builder) {
         String number = builder.toString();
 
         for (int i = 0; i < 6; i++) {
             number = number.replace("" + 10 + i, 'A' + 1 + "");
         }
 
-        return number;
+        return Integer.parseInt(number);
     }
 }
