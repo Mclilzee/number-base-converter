@@ -56,7 +56,7 @@ public class Main {
             return formatHexNumber(builder);
         }
 
-        return builder.toString();
+        return reverseString(builder.toString());
     }
 
     private static String formatHexNumber(StringBuilder builder) {
