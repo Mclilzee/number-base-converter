@@ -101,16 +101,16 @@ public class Main {
 
     private static String convertDecimalToTarget(int targetBase, BigInteger number) {
         StringBuilder builder = new StringBuilder();
-        while (number.compareTo(BigInteger.ZERO) > 0) {
-            builder.append(number.mod(BigInteger.valueOf(targetBase)));
+        while (!number.equals(BigInteger.ZERO)) {
+            builder.append(number.remainder(BigInteger.valueOf(targetBase)));
             number = number.divide(BigInteger.valueOf(targetBase));
         }
 
-        return builder.reverse().toString();
+        return builder.toString();
     }
 
     private static String formatNumber(String number, int base) {
-        if (base <= 9) {
+        if (base <= 10) {
             return number;
         }
 
@@ -119,6 +119,6 @@ public class Main {
             number = number.replaceAll(String.valueOf(i), letter);
         }
 
-        return number;
+        return new StringBuilder(number).reverse().toString();
     }
 }
