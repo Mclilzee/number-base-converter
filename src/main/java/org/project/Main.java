@@ -63,7 +63,7 @@ public class Main {
         try {
             BigInteger decimalResult = convertSourceToDecimal(sourceBase, input);
             String result = convertDecimalToTarget(targetBase, decimalResult);
-            System.out.printf("Conversion result: %s\n\n", formatNumber(result, sourceBase));
+            System.out.printf("Conversion result: %s\n\n", formatNumber(result, targetBase));
         } catch (NumberFormatException e) {
             System.out.println("Wrong number provided for given source base!");
         }
