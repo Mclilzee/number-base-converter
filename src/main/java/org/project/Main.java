@@ -13,16 +13,18 @@ public class Main {
     private static void userAction() {
         while (true) {
             System.out.print("Enter two numbers in format: {source base} {target base} (To quit type /exit) ");
-            String[] inputs = scanner.nextLine().split(" ");
+            String[] inputs = scanner.nextLine().toUpperCase().split(" ");
+
+            if (inputs[0].equals("/EXIT")) {
+                break;
+            }
 
             if (inputs.length != 2) {
                 System.out.println("Wrong input provided");
                 continue;
             }
 
-            if (inputs[0].equals("/exit")) {
-                break;
-            }
+
 
             handleBaseInput(inputs[0], inputs[1]);
         }
@@ -33,10 +35,13 @@ public class Main {
             int sourceBase = Integer.parseInt(sourceBaseInput);
             int targetBase = Integer.parseInt(targetBaseInput);
 
-            if (sourceBase >= 2 && sourceBase <= 32 && targetBase >= 2 && targetBase <= 32) {
+            if (sourceBase >= 2 && sourceBase <= 36 && targetBase >= 2 && targetBase <= 36) {
                 convertFromSourceToTarget(sourceBase, targetBase);
+                return;
             }
         }
+
+        System.out.println("Bases should be between 2 and 36 inclusive");
     }
 
     private static void convertFromSourceToTarget(int sourceBase, int targetBase) {
@@ -44,7 +49,7 @@ public class Main {
             System.out.printf("Enter number in base %d to convert to base %d (To go back type /back) ", sourceBase, targetBase);
             String input = scanner.nextLine().toUpperCase();
 
-            if ("/back".equals(input)) {
+            if ("/BACK".equals(input)) {
                 break;
             }
 
@@ -61,53 +66,20 @@ public class Main {
 
         StringBuilder builder = new StringBuilder();
         while (number.compareTo(BigInteger.ZERO) > 0) {
-            builder.append(number.mod(BigInteger.valueOf(sourceBase)));
-            number = number.divide(BigInteger.valueOf(sourceBase));
+            builder.append(number.mod(BigInteger.valueOf(targetBase)));
+            number = number.divide(BigInteger.valueOf(targetBase));
         }
 
         System.out.printf("Conversion result: %s\n\n", formatNumber(builder.reverse().toString(), sourceBase));
     }
 
     private static BigInteger getBigIntegerFormat(String input) {
-
-    }
-
-//    private static String convertHexToDecimal(String input) {
-//        final int BASE = 16;
-//
-//        int size = input.length();
-//        int sum = 0;
-//
-//        for (int i = 0; i < size; i++) {
-//            String digitString = String.valueOf(input.charAt(size - 1 - i));
-////            int digit = changeHexToNumber(digitString);
-//
-//            if (digit >= BASE) {
-//                throw new NumberFormatException();
-//            }
-//
-//            sum += digit * Math.pow(BASE, i);
-//        }
-//
-//        return String.valueOf(sum);
-//    }
-
-    private static String convertNonHexBaseToDecimal(String input, int targetBase) {
-        int sum = 0;
-        int size = input.length();
-
-        for (int i = 0; i < size; i++) {
-            String digitString = String.valueOf(input.charAt(size - 1 - i));
-            int digit = Integer.parseInt(digitString);
-
-            if (digit >= targetBase) {
-                throw new NumberFormatException();
-            }
-
-            sum += digit * Math.pow(targetBase, i);
+        for (char i = 'A'; i <= 'Z'; i++) {
+            int numberDigit = i - 55;
+            input = input.replaceAll(String.valueOf(i), String.valueOf(numberDigit));
         }
 
-        return String.valueOf(sum);
+        return new BigInteger(input);
     }
 
     private static String formatNumber(String number, int base) {
