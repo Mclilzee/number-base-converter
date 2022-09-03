@@ -2,7 +2,6 @@ package org.project;
 
 import java.math.BigInteger;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class Main {
     static final Scanner scanner = new Scanner(System.in);
@@ -26,33 +25,26 @@ public class Main {
                 case "/exit":
                     return;
                 default:
-                    System.out.println("Incorrect option, choose between /from, /to and /exit");
+                    System.out.println("Incorrect option chosen");
             }
         }
     }
 
-    private static BigInteger getDecimalNumberInput() {
-        while (true) {
-            System.out.print("Enter number in decimal system: ");
-            String input = scanner.nextLine();
-
-            if (input.matches("\\d+")) {
-                return new BigInteger(input);
-            }
-
-            System.out.println("Incorrect number format");
-        }
+    private static BigInteger getInput() {
+        System.out.println("Enter number in base");
     }
 
-    private static int getTargetBaseInput() {
+    private static String getBaseInput() {
         while (true) {
-            String input = scanner.nextLine();
+            String sourceBaseInput = scanner.next();
+            String targetBaseInput = scanner.next();
 
-            if (input.matches("\\d{1,2}")) {
-                int number = Integer.parseInt(input);
+            if (sourceBaseInput.matches("\\d{1,2}") && targetBaseInput.matches("\\d{1,2}")) {
+                int sourceBase = Integer.parseInt(sourceBaseInput);
+                int targetBase = Integer.parseInt(targetBaseInput);
 
-                if (number >= 2 && number <= 32) {
-                    return number;
+                if (sourceBase >= 2 && sourceBase <= 32 && targetBase >= 2 && targetBase <= 32) {
+                    return convertFromSourceToTarget(sourceBase, targetBase);
                 }
             }
 
@@ -60,11 +52,11 @@ public class Main {
         }
     }
 
-    private static String convertDecimalToBaseTargetConversion() {
-        BigInteger decimalNumber = getDecimalNumberInput();
+    private static String convertFromSourceToTarget(int sourceBase, int targetBase) {
+        BigInteger decimalNumber = getSourceBaseInput();
 
         System.out.print("Enter target base: ");
-        int sourceBase = getTargetBaseInput();
+        int sourceBase = getBaseInput();
 
         StringBuilder builder = new StringBuilder();
         while (decimalNumber.compareTo(BigInteger.ZERO) > 0) {
@@ -79,7 +71,7 @@ public class Main {
         String numberInput = getSourceNumberInput();
 
         System.out.print("Enter source base: ");
-        int targetBase = getTargetBaseInput();
+        int targetBase = getBaseInput();
 
         System.out.print("Conversion to decimal result: ");
         try {
