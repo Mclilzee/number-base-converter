@@ -23,64 +23,46 @@ public class Main {
                 break;
             }
 
-            String result = handleBaseInput(inputs[0], inputs[1]);
-
-            if (!result.isEmpty()) {
-                System.out.println("Conversion result: " + result);
-                System.out.println();
-            }
+            handleBaseInput(inputs[0], inputs[1]);
         }
     }
 
-    private static String handleBaseInput(String sourceBaseInput, String targetBaseInput) {
+    private static void handleBaseInput(String sourceBaseInput, String targetBaseInput) {
         if (sourceBaseInput.matches("\\d{1,2}") && targetBaseInput.matches("\\d{1,2}")) {
             int sourceBase = Integer.parseInt(sourceBaseInput);
             int targetBase = Integer.parseInt(targetBaseInput);
 
             if (sourceBase >= 2 && sourceBase <= 32 && targetBase >= 2 && targetBase <= 32) {
-                return convertFromSourceToTarget(sourceBase, targetBase);
+                convertFromSourceToTarget(sourceBase, targetBase);
             }
         }
-
-        return "";
     }
 
-    private static String convertFromSourceToTarget(int sourceBase, int targetBase) {
-
+    private static void convertFromSourceToTarget(int sourceBase, int targetBase) {
         while (true) {
             System.out.printf("Enter number in base %d to convert to base %d (To go back type /back) ", sourceBase, targetBase);
-            String input = scanner.next();
+            String input = scanner.nextLine();
+
+            if ("/back".equals(input)) {
+                break;
+            }
+
+            if (input.matches("(\\d|[A-Z])+")) {
+                printConversion(sourceBase, targetBase);
+            }
+
+            System.out.println("Incorrect Number format");
         }
+    }
 
-        System.out.print("Enter target base: ");
-        int sourceBase = handleBaseInput();
-
+    private static void printConversion(int sourceBase, int targetBase) {
         StringBuilder builder = new StringBuilder();
         while (decimalNumber.compareTo(BigInteger.ZERO) > 0) {
             builder.append(decimalNumber.mod(BigInteger.valueOf(sourceBase)));
             decimalNumber = decimalNumber.divide(BigInteger.valueOf(sourceBase));
         }
 
-        return formatNumber(builder.reverse().toString(), sourceBase);
-    }
-
-    private static void printBaseToDecimalConversion() {
-        String numberInput = getSourceNumberInput();
-
-        System.out.print("Enter source base: ");
-        int targetBase = handleBaseInput();
-
-        System.out.print("Conversion to decimal result: ");
-        try {
-            if (targetBase == 16) {
-                System.out.println(convertHexToDecimal(numberInput));
-            } else {
-                System.out.println(convertNonHexBaseToDecimal(numberInput, targetBase));
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong number format provided for the base!");
-        }
-        System.out.println();
+        System.out.printf("Conversion result: %s", formatNumber(builder.reverse().toString(), sourceBase));
     }
 
     private static String convertHexToDecimal(String input) {
@@ -103,18 +85,6 @@ public class Main {
         return String.valueOf(sum);
     }
 
-    private static int changeHexToNumber(String input) {
-        return switch (input) {
-            case "A" -> 10;
-            case "B" -> 11;
-            case "C" -> 12;
-            case "D" -> 13;
-            case "E" -> 14;
-            case "F" -> 15;
-            default -> Integer.parseInt(input);
-        };
-    }
-
     private static String convertNonHexBaseToDecimal(String input, int targetBase) {
         int sum = 0;
         int size = input.length();
@@ -131,20 +101,6 @@ public class Main {
         }
 
         return String.valueOf(sum);
-    }
-
-    private static String getSourceNumberInput() {
-        while (true) {
-            System.out.print("Enter source number: ");
-            String input = scanner.nextLine().toUpperCase();
-
-            if (input.matches("(\\d|[A-F])+")) {
-
-                return input;
-            }
-
-            System.out.println("Incorrect number format");
-        }
     }
 
     private static String formatNumber(String number, int base) {
