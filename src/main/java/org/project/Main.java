@@ -10,11 +10,11 @@ public class Main {
     }
 
     private static void userAction() {
-        while(true) {
+        while (true) {
             System.out.print("Do you want to convert /from decimal or /to decimal? (To quit type /exit) ");
             String input = scanner.nextLine();
 
-            switch(input) {
+            switch (input) {
                 case "/from":
                     System.out.println(convertDecimalToTargetBase());
                     break;
@@ -58,7 +58,6 @@ public class Main {
         int decimalNumber = getDecimalNumberInput();
         int targetBase = getTargetBaseInput();
 
-
         StringBuilder builder = new StringBuilder();
         while (decimalNumber > 0) {
             builder.append(decimalNumber % targetBase);
@@ -73,7 +72,32 @@ public class Main {
     }
 
     private static String convertBaseToDecimal() {
-        return getSourceNumberInput() + "";
+        String numberInput = getSourceNumberInput();
+        int targetBase = getTargetBaseInput();
+
+        if (targetBase == 16) {
+            return convertHexToDecimal(numberInput);
+        }
+
+        return convertNonHexBaseToDecimal(numberInput, targetBase);
+    }
+
+    private static String convertNonHexBaseToDecimal(String input, int targetBase) {
+        if (input.matches("[A-F]")) {
+            throw new NumberFormatException();
+        }
+
+        int sum = 0;
+        int size = input.length();
+
+        for (int i = 0; i < size; i++) {
+            String digitString = String.valueOf(input.charAt(size - 1 - i));
+            int digit = Integer.parseInt(digitString);
+
+            sum += digit * Math.pow(targetBase, i);
+        }
+
+        return String.valueOf(sum);
     }
 
     private static String getSourceNumberInput() {
@@ -102,5 +126,4 @@ public class Main {
 
         return new StringBuilder(numberString).reverse().toString();
     }
-
 }
