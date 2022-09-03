@@ -19,7 +19,7 @@ public class Main {
                     System.out.println(convertDecimalToTargetBase());
                     break;
                 case "/to":
-                    System.out.println();
+                    System.out.println(convertBaseToDecimal());
                 case "/exit":
                     return;
                 default:
@@ -70,6 +70,24 @@ public class Main {
         }
 
         return builder.reverse().toString();
+    }
+
+    private static String convertBaseToDecimal() {
+        return getSourceNumberInput() + "";
+    }
+
+    private static String getSourceNumberInput() {
+        while (true) {
+            System.out.print("Enter source number: ");
+            String input = scanner.nextLine().toUpperCase();
+
+            if (input.matches("(\\d|[A-F])+")) {
+
+                return input;
+            }
+
+            System.out.println("Incorrect number format");
+        }
     }
 
     private static String formatHexNumber(StringBuilder builder) {
