@@ -83,14 +83,19 @@ public class Main {
     }
 
     private static String convertHexToDecimal(String input) {
-        final int base = 16;
+        final int BASE = 16;
 
         int size = input.length();
         int sum = 0;
 
         for (int i = 0; i < size; i++) {
+            String digitString = String.valueOf(input.charAt(size - 1 - i));
+            int digit = changeHexToNumber(digitString);
 
+            sum += digit * Math.pow(BASE, i);
         }
+
+        return String.valueOf(sum);
     }
 
     private static int changeHexToNumber(String input) {
