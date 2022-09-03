@@ -1,21 +1,10 @@
 package org.project;
 
+import java.math.BigInteger;
 import java.util.Scanner;
 
 public class Main {
     static final Scanner scanner = new Scanner(System.in);
-
-    enum Base {
-        HEX("16"),
-        OCTAL("8"),
-        BINARY("2");
-
-        final String type;
-
-        Base(String type) {
-            this.type = type;
-        }
-    }
 
     public static void main(String[] args) {
         userAction();
@@ -58,13 +47,15 @@ public class Main {
         while (true) {
             String input = scanner.nextLine();
 
-            for (Base base : Base.values()) {
-                if (base.type.equals(input)) {
-                    return Integer.parseInt(input);
+            if (input.matches("\\d{1,2}")) {
+                int number = Integer.parseInt(input);
+
+                if (number >= 2 && number <= 32) {
+                    return number;
                 }
             }
 
-            System.out.print("Incorrect base type, choose from : 2, 8 and 16: ");
+            System.out.print("Incorrect base type, choose between 2 and 32 inclusive: ");
         }
     }
 
