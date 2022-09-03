@@ -5,6 +5,18 @@ import java.util.Scanner;
 public class Main {
     static final Scanner scanner = new Scanner(System.in);
 
+    enum Base {
+        HEX("16"),
+        OCTAL("8"),
+        BINARY("2");
+
+        String type;
+
+        Base(String type) {
+            this.type = type;
+        }
+    }
+
     public static void main(String[] args) {
         userAction();
     }
@@ -47,8 +59,10 @@ public class Main {
             System.out.print("Enter target base: ");
             String input = scanner.nextLine();
 
-            if ("2".equals(input) || "8".equals(input) || "16".equals(input)) {
-                return Integer.parseInt(input);
+            for (Base base : Base.values()) {
+                if (base.type.equals(input)) {
+                    return Integer.parseInt(input);
+                }
             }
 
             System.out.println("Incorrect base type, choose from : 2, 8 and 16");
