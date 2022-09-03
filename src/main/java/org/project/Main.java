@@ -24,8 +24,6 @@ public class Main {
                 continue;
             }
 
-
-
             handleBaseInput(inputs[0], inputs[1]);
         }
     }
@@ -62,24 +60,37 @@ public class Main {
     }
 
     private static void printConversion(int sourceBase, int targetBase, String input) {
-        BigInteger number = getBigIntegerFormat(input);
-
-        StringBuilder builder = new StringBuilder();
-        while (number.compareTo(BigInteger.ZERO) > 0) {
-            builder.append(number.mod(BigInteger.valueOf(targetBase)));
-            number = number.divide(BigInteger.valueOf(targetBase));
-        }
+        BigInteger decimalResult = convertSourceToDecimal(sourceBase, input);
 
         System.out.printf("Conversion result: %s\n\n", formatNumber(builder.reverse().toString(), sourceBase));
     }
 
-    private static BigInteger getBigIntegerFormat(String input) {
-        for (char i = 'A'; i <= 'Z'; i++) {
-            int numberDigit = i - 55;
-            input = input.replaceAll(String.valueOf(i), String.valueOf(numberDigit));
+    private static BigInteger convertSourceToDecimal(int source, String number) {
+        BigInteger sum = BigInteger.ZERO;
+
+        for (int i = 0; i < number.length(); i++) {
+            int digit = getDigit(number, i);
+
+            if (digit >= source) {
+                throw new NumberFormatException();
+            }
+
+            sum = sum.add(BigInteger.valueOf(digit));
         }
 
-        return new BigInteger(input);
+        return sum;
+    }
+
+    private static int getDigit(String number, int i) {
+        char digitChar = number.charAt(number.length() - 1 - i);
+        int digit;
+
+        if (digitChar >= 'A') {
+            digit = digitChar - 55;
+        } else {
+            digit = Integer.parseInt(String.valueOf(digitChar));
+        }
+        return digit;
     }
 
     private static String formatNumber(String number, int base) {
