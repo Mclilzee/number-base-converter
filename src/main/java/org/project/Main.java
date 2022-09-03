@@ -10,7 +10,7 @@ public class Main {
         OCTAL("8"),
         BINARY("2");
 
-        String type;
+        final String type;
 
         Base(String type) {
             this.type = type;
@@ -56,7 +56,6 @@ public class Main {
 
     private static int getTargetBaseInput() {
         while (true) {
-            System.out.print("Enter target base: ");
             String input = scanner.nextLine();
 
             for (Base base : Base.values()) {
@@ -65,22 +64,24 @@ public class Main {
                 }
             }
 
-            System.out.println("Incorrect base type, choose from : 2, 8 and 16");
+            System.out.print("Incorrect base type, choose from : 2, 8 and 16: ");
         }
     }
 
     private static void printDecimalToBaseTargetConversion() {
         int decimalNumber = getDecimalNumberInput();
-        int targetBase = getTargetBaseInput();
+
+        System.out.print("Enter target base: ");
+        int sourceBase = getTargetBaseInput();
 
         StringBuilder builder = new StringBuilder();
         while (decimalNumber > 0) {
-            builder.append(decimalNumber % targetBase);
-            decimalNumber /= targetBase;
+            builder.append(decimalNumber % sourceBase);
+            decimalNumber /= sourceBase;
         }
 
         System.out.print("Conversion to decimal result: ");
-        if (targetBase == 16) {
+        if (sourceBase == 16) {
             System.out.println(formatHexNumber(builder));
         } else {
             System.out.println(builder.reverse().toString());
@@ -90,6 +91,8 @@ public class Main {
 
     private static void printBaseToDecimalConversion() {
         String numberInput = getSourceNumberInput();
+        
+        System.out.print("Enter source base: ");
         int targetBase = getTargetBaseInput();
 
         System.out.print("Conversion result: ");
