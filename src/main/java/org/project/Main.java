@@ -16,10 +16,15 @@ public class Main {
 
             switch (input) {
                 case "/from":
+                    System.out.print("Conversion result: ");
                     System.out.println(convertDecimalToTargetBase());
+                    System.out.println();
                     break;
                 case "/to":
+                    System.out.print("Conversion to decimal result: ");
                     System.out.println(convertBaseToDecimal());
+                    System.out.println();
+                    break;
                 case "/exit":
                     return;
                 default:
@@ -111,8 +116,8 @@ public class Main {
     }
 
     private static String convertNonHexBaseToDecimal(String input, int targetBase) {
-        if (input.matches("[A-F]")) {
-            throw new NumberFormatException();
+        if (input.matches(".*[A-F].*")) {
+            return "Wrong number format provided!";
         }
 
         int sum = 0;
