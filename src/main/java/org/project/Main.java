@@ -60,9 +60,13 @@ public class Main {
     }
 
     private static void printConversion(int sourceBase, int targetBase, String input) {
-        BigInteger decimalResult = convertSourceToDecimal(sourceBase, input);
-
-        System.out.printf("Conversion result: %s\n\n", formatNumber(builder.reverse().toString(), sourceBase));
+        try {
+            BigInteger decimalResult = convertSourceToDecimal(sourceBase, input);
+            String result = convertDecimalToTarget(targetBase, decimalResult);
+            System.out.printf("Conversion result: %s\n\n", formatNumber(result, sourceBase));
+        } catch (NumberFormatException e) {
+            System.out.println("Wrong number provided for given source base!");
+        }
     }
 
     private static BigInteger convertSourceToDecimal(int source, String number) {
@@ -74,8 +78,10 @@ public class Main {
             if (digit >= source) {
                 throw new NumberFormatException();
             }
+            BigInteger exponent = BigInteger.valueOf(source).pow(i);
+            BigInteger multipliedNumber = BigInteger.valueOf(digit).multiply(exponent);
 
-            sum = sum.add(BigInteger.valueOf(digit));
+            sum = sum.add(multipliedNumber);
         }
 
         return sum;
@@ -91,6 +97,16 @@ public class Main {
             digit = Integer.parseInt(String.valueOf(digitChar));
         }
         return digit;
+    }
+
+    private static String convertDecimalToTarget(int targetBase, BigInteger number) {
+        StringBuilder builder = new StringBuilder();
+        while (number.compareTo(BigInteger.ZERO) > 0) {
+            builder.append(number.mod(BigInteger.valueOf(targetBase)));
+            number = number.divide(BigInteger.valueOf(targetBase));
+        }
+
+        return builder.reverse().toString();
     }
 
     private static String formatNumber(String number, int base) {
