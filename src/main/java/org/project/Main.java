@@ -17,7 +17,7 @@ public class Main {
 
             switch (input) {
                 case "/from":
-                    printDecimalToBaseTargetConversion();
+                    convertDecimalToBaseTargetConversion();
                     break;
                 case "/to":
                     printBaseToDecimalConversion();
@@ -30,13 +30,13 @@ public class Main {
         }
     }
 
-    private static int getDecimalNumberInput() {
+    private static BigInteger getDecimalNumberInput() {
         while (true) {
             System.out.print("Enter number in decimal system: ");
             String input = scanner.nextLine();
 
             if (input.matches("\\d+")) {
-                return Integer.parseInt(input);
+                return new BigInteger(input);
             }
 
             System.out.println("Incorrect number format");
@@ -59,25 +59,19 @@ public class Main {
         }
     }
 
-    private static void printDecimalToBaseTargetConversion() {
-        int decimalNumber = getDecimalNumberInput();
+    private static String convertDecimalToBaseTargetConversion() {
+        BigInteger decimalNumber = getDecimalNumberInput();
 
         System.out.print("Enter target base: ");
         int sourceBase = getTargetBaseInput();
 
         StringBuilder builder = new StringBuilder();
-        while (decimalNumber > 0) {
-            builder.append(decimalNumber % sourceBase);
-            decimalNumber /= sourceBase;
+        while (decimalNumber.compareTo(BigInteger.ZERO) > 0) {
+            builder.append(decimalNumber.mod(BigInteger.valueOf(sourceBase)));
+            decimalNumber = decimalNumber.divide(BigInteger.valueOf(sourceBase));
         }
 
-        System.out.print("Conversion result: ");
-        if (sourceBase == 16) {
-            System.out.println(formatHexNumber(builder));
-        } else {
-            System.out.println(builder.reverse());
-        }
-        System.out.println();
+        return formatNumber(builder, sourceBase);
     }
 
     private static void printBaseToDecimalConversion() {
@@ -163,16 +157,15 @@ public class Main {
         }
     }
 
-    private static String formatHexNumber(StringBuilder builder) {
-        String numberString = builder.toString();
+    private static String formatNumber(StringBuilder number, int base) {
+        if (base <= 9) {
+            return number.reverse().toString();
+        }
 
-        numberString = numberString.replaceAll("10", "A");
-        numberString = numberString.replaceAll("11", "B");
-        numberString = numberString.replaceAll("12", "C");
-        numberString = numberString.replaceAll("13", "D");
-        numberString = numberString.replaceAll("14", "E");
-        numberString = numberString.replaceAll("15", "F");
+        for (int i = 10; i < base; i++) {
 
-        return new StringBuilder(numberString).reverse().toString();
+        }
+
+        return number.reverse().toString();
     }
 }
