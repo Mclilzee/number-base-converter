@@ -16,14 +16,10 @@ public class Main {
 
             switch (input) {
                 case "/from":
-                    System.out.print("Conversion result: ");
-                    System.out.println(convertDecimalToTargetBase());
-                    System.out.println();
+                    printDecimalToBaseTargetConversion();
                     break;
                 case "/to":
-                    System.out.print("Conversion to decimal result: ");
-                    System.out.println(convertBaseToDecimal());
-                    System.out.println();
+                    printBaseToDecimalConversion();
                     break;
                 case "/exit":
                     return;
@@ -59,7 +55,7 @@ public class Main {
         }
     }
 
-    private static String convertDecimalToTargetBase() {
+    private static void printDecimalToBaseTargetConversion() {
         int decimalNumber = getDecimalNumberInput();
         int targetBase = getTargetBaseInput();
 
@@ -69,22 +65,30 @@ public class Main {
             decimalNumber /= targetBase;
         }
 
+        System.out.print("Conversion to decimal result: ");
         if (targetBase == 16) {
-            return formatHexNumber(builder);
+            System.out.println(formatHexNumber(builder));
+        } else {
+            System.out.println(builder.reverse().toString());
         }
-
-        return builder.reverse().toString();
+        System.out.println();
     }
 
-    private static String convertBaseToDecimal() {
+    private static void printBaseToDecimalConversion() {
         String numberInput = getSourceNumberInput();
         int targetBase = getTargetBaseInput();
 
+        System.out.print("Conversion result: ");
         if (targetBase == 16) {
-            return convertHexToDecimal(numberInput);
+            System.out.println(convertHexToDecimal(numberInput));
+        } else {
+            try {
+                System.out.println(convertNonHexBaseToDecimal(numberInput, targetBase));
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong number format provided for the base!");
+            }
         }
-
-        return convertNonHexBaseToDecimal(numberInput, targetBase);
+        System.out.println();
     }
 
     private static String convertHexToDecimal(String input) {
@@ -116,10 +120,6 @@ public class Main {
     }
 
     private static String convertNonHexBaseToDecimal(String input, int targetBase) {
-        if (input.matches(".*[A-F].*")) {
-            return "Wrong number format provided!";
-        }
-
         int sum = 0;
         int size = input.length();
 
