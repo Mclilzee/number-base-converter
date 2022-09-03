@@ -15,8 +15,9 @@ public class Main {
             System.out.print("Enter two numbers in format: {source base} {target base} (To quit type /exit) ");
             String[] inputs = scanner.nextLine().split(" ");
 
-            if (inputs.length > 2 || inputs.length < 1) {
+            if (inputs.length != 2) {
                 System.out.println("Wrong input provided");
+                continue;
             }
 
             if (inputs[0].equals("/exit")) {
@@ -41,49 +42,55 @@ public class Main {
     private static void convertFromSourceToTarget(int sourceBase, int targetBase) {
         while (true) {
             System.out.printf("Enter number in base %d to convert to base %d (To go back type /back) ", sourceBase, targetBase);
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().toUpperCase();
 
             if ("/back".equals(input)) {
                 break;
             }
 
             if (input.matches("(\\d|[A-Z])+")) {
-                printConversion(sourceBase, targetBase);
+                printConversion(sourceBase, targetBase, input);
+            } else {
+                System.out.println("Incorrect Number format");
             }
-
-            System.out.println("Incorrect Number format");
         }
     }
 
-    private static void printConversion(int sourceBase, int targetBase) {
+    private static void printConversion(int sourceBase, int targetBase, String input) {
+        BigInteger number = getBigIntegerFormat(input);
+
         StringBuilder builder = new StringBuilder();
-        while (decimalNumber.compareTo(BigInteger.ZERO) > 0) {
-            builder.append(decimalNumber.mod(BigInteger.valueOf(sourceBase)));
-            decimalNumber = decimalNumber.divide(BigInteger.valueOf(sourceBase));
+        while (number.compareTo(BigInteger.ZERO) > 0) {
+            builder.append(number.mod(BigInteger.valueOf(sourceBase)));
+            number = number.divide(BigInteger.valueOf(sourceBase));
         }
 
-        System.out.printf("Conversion result: %s", formatNumber(builder.reverse().toString(), sourceBase));
+        System.out.printf("Conversion result: %s\n\n", formatNumber(builder.reverse().toString(), sourceBase));
     }
 
-    private static String convertHexToDecimal(String input) {
-        final int BASE = 16;
+    private static BigInteger getBigIntegerFormat(String input) {
 
-        int size = input.length();
-        int sum = 0;
-
-        for (int i = 0; i < size; i++) {
-            String digitString = String.valueOf(input.charAt(size - 1 - i));
-            int digit = changeHexToNumber(digitString);
-
-            if (digit >= BASE) {
-                throw new NumberFormatException();
-            }
-
-            sum += digit * Math.pow(BASE, i);
-        }
-
-        return String.valueOf(sum);
     }
+
+//    private static String convertHexToDecimal(String input) {
+//        final int BASE = 16;
+//
+//        int size = input.length();
+//        int sum = 0;
+//
+//        for (int i = 0; i < size; i++) {
+//            String digitString = String.valueOf(input.charAt(size - 1 - i));
+////            int digit = changeHexToNumber(digitString);
+//
+//            if (digit >= BASE) {
+//                throw new NumberFormatException();
+//            }
+//
+//            sum += digit * Math.pow(BASE, i);
+//        }
+//
+//        return String.valueOf(sum);
+//    }
 
     private static String convertNonHexBaseToDecimal(String input, int targetBase) {
         int sum = 0;
