@@ -6,16 +6,26 @@ public class Main {
     static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-
         userAction();
     }
 
     private static void userAction() {
-        int decimalNumber = getDecimalNumberInput();
-        int targetBase = getTargetBaseInput();
+        while(true) {
+            System.out.print("Do you want to convert /from decimal or /to decimal? (To quit type /exit) ");
+            String input = scanner.nextLine();
 
-        System.out.print("Conversion result: ");
-        System.out.println(convertDecimalToTargetBase(decimalNumber, targetBase));
+            switch(input) {
+                case "/from":
+                    System.out.println(convertDecimalToTargetBase());
+                    break;
+                case "/to":
+                    System.out.println();
+                case "/exit":
+                    return;
+                default:
+                    System.out.println("Incorrect option, choose between /from, /to and /exit");
+            }
+        }
     }
 
     private static int getDecimalNumberInput() {
@@ -44,11 +54,15 @@ public class Main {
         }
     }
 
-    private static String convertDecimalToTargetBase(int decimal, int targetBase) {
+    private static String convertDecimalToTargetBase() {
+        int decimalNumber = getDecimalNumberInput();
+        int targetBase = getTargetBaseInput();
+
+
         StringBuilder builder = new StringBuilder();
-        while (decimal > 0) {
-            builder.append(decimal % targetBase);
-            decimal /= targetBase;
+        while (decimalNumber > 0) {
+            builder.append(decimalNumber % targetBase);
+            decimalNumber /= targetBase;
         }
 
         if (targetBase == 16) {
