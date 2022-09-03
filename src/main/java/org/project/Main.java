@@ -12,51 +12,48 @@ public class Main {
 
     private static void userAction() {
         while (true) {
-            System.out.print("Do you want to convert /from decimal or /to decimal? (To quit type /exit) ");
-            String input = scanner.nextLine();
+            System.out.print("Enter two numbers in format: {source base} {target base} (To quit type /exit) ");
+            String[] inputs = scanner.nextLine().split(" ");
 
-            switch (input) {
-                case "/from":
-                    convertDecimalToBaseTargetConversion();
-                    break;
-                case "/to":
-                    printBaseToDecimalConversion();
-                    break;
-                case "/exit":
-                    return;
-                default:
-                    System.out.println("Incorrect option chosen");
+            if (inputs.length > 2 || inputs.length < 1) {
+                System.out.println("Wrong input provided");
+            }
+
+            if (inputs[0].equals("/exit")) {
+                break;
+            }
+
+            String result = handleBaseInput(inputs[0], inputs[1]);
+
+            if (!result.isEmpty()) {
+                System.out.println("Conversion result: " + result);
+                System.out.println();
             }
         }
     }
 
-    private static BigInteger getInput() {
-        System.out.println("Enter number in base");
-    }
+    private static String handleBaseInput(String sourceBaseInput, String targetBaseInput) {
+        if (sourceBaseInput.matches("\\d{1,2}") && targetBaseInput.matches("\\d{1,2}")) {
+            int sourceBase = Integer.parseInt(sourceBaseInput);
+            int targetBase = Integer.parseInt(targetBaseInput);
 
-    private static String getBaseInput() {
-        while (true) {
-            String sourceBaseInput = scanner.next();
-            String targetBaseInput = scanner.next();
-
-            if (sourceBaseInput.matches("\\d{1,2}") && targetBaseInput.matches("\\d{1,2}")) {
-                int sourceBase = Integer.parseInt(sourceBaseInput);
-                int targetBase = Integer.parseInt(targetBaseInput);
-
-                if (sourceBase >= 2 && sourceBase <= 32 && targetBase >= 2 && targetBase <= 32) {
-                    return convertFromSourceToTarget(sourceBase, targetBase);
-                }
+            if (sourceBase >= 2 && sourceBase <= 32 && targetBase >= 2 && targetBase <= 32) {
+                return convertFromSourceToTarget(sourceBase, targetBase);
             }
-
-            System.out.print("Incorrect base type, choose between 2 and 32 inclusive: ");
         }
+
+        return "";
     }
 
     private static String convertFromSourceToTarget(int sourceBase, int targetBase) {
-        BigInteger decimalNumber = getSourceBaseInput();
+
+        while (true) {
+            System.out.printf("Enter number in base %d to convert to base %d (To go back type /back) ", sourceBase, targetBase);
+            String input = scanner.next();
+        }
 
         System.out.print("Enter target base: ");
-        int sourceBase = getBaseInput();
+        int sourceBase = handleBaseInput();
 
         StringBuilder builder = new StringBuilder();
         while (decimalNumber.compareTo(BigInteger.ZERO) > 0) {
@@ -71,7 +68,7 @@ public class Main {
         String numberInput = getSourceNumberInput();
 
         System.out.print("Enter source base: ");
-        int targetBase = getBaseInput();
+        int targetBase = handleBaseInput();
 
         System.out.print("Conversion to decimal result: ");
         try {
