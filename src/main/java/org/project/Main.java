@@ -80,22 +80,22 @@ public class Main {
             decimalNumber /= sourceBase;
         }
 
-        System.out.print("Conversion to decimal result: ");
+        System.out.print("Conversion result: ");
         if (sourceBase == 16) {
             System.out.println(formatHexNumber(builder));
         } else {
-            System.out.println(builder.reverse().toString());
+            System.out.println(builder.reverse());
         }
         System.out.println();
     }
 
     private static void printBaseToDecimalConversion() {
         String numberInput = getSourceNumberInput();
-        
+
         System.out.print("Enter source base: ");
         int targetBase = getTargetBaseInput();
 
-        System.out.print("Conversion result: ");
+        System.out.print("Conversion to decimal result: ");
         try {
             if (targetBase == 16) {
                 System.out.println(convertHexToDecimal(numberInput));
