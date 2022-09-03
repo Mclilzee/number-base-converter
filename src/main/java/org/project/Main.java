@@ -79,14 +79,14 @@ public class Main {
         int targetBase = getTargetBaseInput();
 
         System.out.print("Conversion result: ");
-        if (targetBase == 16) {
-            System.out.println(convertHexToDecimal(numberInput));
-        } else {
-            try {
+        try {
+            if (targetBase == 16) {
+                System.out.println(convertHexToDecimal(numberInput));
+            } else {
                 System.out.println(convertNonHexBaseToDecimal(numberInput, targetBase));
-            } catch (NumberFormatException e) {
-                System.out.println("Wrong number format provided for the base!");
             }
+        } catch (NumberFormatException e) {
+            System.out.println("Wrong number format provided for the base!");
         }
         System.out.println();
     }
@@ -100,6 +100,10 @@ public class Main {
         for (int i = 0; i < size; i++) {
             String digitString = String.valueOf(input.charAt(size - 1 - i));
             int digit = changeHexToNumber(digitString);
+
+            if (digit >= BASE) {
+                throw new NumberFormatException();
+            }
 
             sum += digit * Math.pow(BASE, i);
         }
@@ -126,6 +130,10 @@ public class Main {
         for (int i = 0; i < size; i++) {
             String digitString = String.valueOf(input.charAt(size - 1 - i));
             int digit = Integer.parseInt(digitString);
+
+            if (digit >= targetBase) {
+                throw new NumberFormatException();
+            }
 
             sum += digit * Math.pow(targetBase, i);
         }
