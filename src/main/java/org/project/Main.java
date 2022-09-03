@@ -2,6 +2,7 @@ package org.project;
 
 import java.math.BigInteger;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Main {
     static final Scanner scanner = new Scanner(System.in);
@@ -71,7 +72,7 @@ public class Main {
             decimalNumber = decimalNumber.divide(BigInteger.valueOf(sourceBase));
         }
 
-        return formatNumber(builder, sourceBase);
+        return formatNumber(builder.reverse().toString(), sourceBase);
     }
 
     private static void printBaseToDecimalConversion() {
@@ -157,15 +158,16 @@ public class Main {
         }
     }
 
-    private static String formatNumber(StringBuilder number, int base) {
+    private static String formatNumber(String number, int base) {
         if (base <= 9) {
-            return number.reverse().toString();
+            return number;
         }
 
         for (int i = 10; i < base; i++) {
-
+            String letter = String.valueOf((char) (55 + i));
+            number = number.replaceAll(String.valueOf(i), letter);
         }
 
-        return number.reverse().toString();
+        return number;
     }
 }
