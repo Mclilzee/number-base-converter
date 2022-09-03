@@ -82,6 +82,29 @@ public class Main {
         return convertNonHexBaseToDecimal(numberInput, targetBase);
     }
 
+    private static String convertHexToDecimal(String input) {
+        final int base = 16;
+
+        int size = input.length();
+        int sum = 0;
+
+        for (int i = 0; i < size; i++) {
+
+        }
+    }
+
+    private static int changeHexToNumber(String input) {
+        return switch (input) {
+            case "A" -> 10;
+            case "B" -> 11;
+            case "C" -> 12;
+            case "D" -> 13;
+            case "E" -> 14;
+            case "F" -> 15;
+            default -> Integer.parseInt(input);
+        };
+    }
+
     private static String convertNonHexBaseToDecimal(String input, int targetBase) {
         if (input.matches("[A-F]")) {
             throw new NumberFormatException();
