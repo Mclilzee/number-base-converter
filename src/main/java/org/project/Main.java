@@ -63,7 +63,7 @@ public class Main {
         try {
             BigInteger decimalResult = convertSourceToDecimal(sourceBase, input);
             String result = convertDecimalToTarget(targetBase, decimalResult);
-            System.out.printf("Conversion result: %s\n\n", formatNumber(result, targetBase));
+            System.out.printf("Conversion result: %s\n\n", result);
         } catch (NumberFormatException e) {
             System.out.println("Wrong number provided for given source base!");
         }
@@ -102,19 +102,20 @@ public class Main {
     private static String convertDecimalToTarget(int targetBase, BigInteger number) {
         StringBuilder builder = new StringBuilder();
         while (!number.equals(BigInteger.ZERO)) {
-            builder.append(number.remainder(BigInteger.valueOf(targetBase)));
+            int digit = number.remainder(BigInteger.valueOf(targetBase)).intValue();
+            builder.append(formatNumber(digit, targetBase));
             number = number.divide(BigInteger.valueOf(targetBase));
         }
 
-        return builder.toString();
+        return builder.reverse().toString();
     }
 
-    private static String formatNumber(String number, int base) {
-        for (int i = 10; i < base; i++) {
-            String letter = String.valueOf((char) (55 + i));
-            number = number.replaceAll(String.valueOf(i), letter);
+    private static String formatNumber(int number, int base) {
+
+        if (number >= 10) {
+            return String.valueOf((char) (number + 55));
         }
 
-        return new StringBuilder(number).reverse().toString();
+        return String.valueOf(number);
     }
 }
