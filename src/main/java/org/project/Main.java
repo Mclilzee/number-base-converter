@@ -110,10 +110,6 @@ public class Main {
     }
 
     private static String formatNumber(String number, int base) {
-        if (base <= 10) {
-            return number;
-        }
-
         for (int i = 10; i < base; i++) {
             String letter = String.valueOf((char) (55 + i));
             number = number.replaceAll(String.valueOf(i), letter);
