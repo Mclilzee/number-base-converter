@@ -51,7 +51,7 @@ public class Main {
                 break;
             }
 
-            if (input.matches("(\\d|[A-Z])+\\.?(\\d|[A-Z])")) {
+            if (input.matches("(\\d|[A-Z])+(\\.(\\d|[A-Z])+)?")) {
                 printConversion(sourceBase, targetBase, input);
             } else {
                 System.out.println("Incorrect Number format");
