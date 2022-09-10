@@ -62,19 +62,17 @@ public class Main {
 
     private static void printConversion(int sourceBase, int targetBase, String input) {
         String[] inputs = input.split("\\.");
-        BigDecimal targetResult = BigDecimal.ZERO;
+        StringBuilder targetResult = new StringBuilder("0");
 
         try {
             if (!"0".equalsIgnoreCase(inputs[0])) {
                 BigDecimal decimalResult = convertSourceToDecimal(sourceBase, inputs[0]);
-                targetResult = convertDecimalToTarget(targetBase, decimalResult);
+                targetResult = new StringBuilder(convertDecimalToTarget(targetBase, decimalResult));
             }
 
             if (inputs.length > 1) {
                 BigDecimal fractionResult = convertSourceToDecimalFraction(sourceBase, inputs[1]);
-                BigDecimal fractionTargetResult = convertDecimalFractionToTarget(targetBase, fractionResult);
-
-                targetResult = targetResult.add(fractionTargetResult);
+                targetResult.append(".").append(convertDecimalFractionToTarget(targetBase, fractionResult));
             }
 
             System.out.printf("Conversion result: %s\n\n", targetResult);
@@ -131,7 +129,7 @@ public class Main {
         return digit;
     }
 
-    private static BigDecimal convertDecimalToTarget(int targetBase, BigDecimal number) {
+    private static String convertDecimalToTarget(int targetBase, BigDecimal number) {
         StringBuilder builder = new StringBuilder();
         while (!number.stripTrailingZeros().equals(BigDecimal.ZERO)) {
             int digit = number.remainder(BigDecimal.valueOf(targetBase)).intValue();
@@ -139,11 +137,11 @@ public class Main {
             number = number.divide(BigDecimal.valueOf(targetBase), RoundingMode.FLOOR);
         }
 
-        return new BigDecimal(builder.reverse().toString());
+        return builder.reverse().toString();
     }
 
-    private static BigDecimal convertDecimalFractionToTarget(int targetBase, BigDecimal number) {
-        StringBuilder builder = new StringBuilder("0.");
+    private static String convertDecimalFractionToTarget(int targetBase, BigDecimal number) {
+        StringBuilder builder = new StringBuilder();
         while (!number.stripTrailingZeros().equals(BigDecimal.ZERO)) {
             number = number.multiply(BigDecimal.valueOf(targetBase));
             int digit = number.intValue();
@@ -158,7 +156,7 @@ public class Main {
             }
         }
 
-        return new BigDecimal(builder.toString());
+        return builder.toString();
     }
 
     private static String formatNumber(int number) {
