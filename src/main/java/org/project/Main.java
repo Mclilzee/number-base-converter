@@ -67,6 +67,10 @@ public class Main {
             BigDecimal decimalResult = convertSourceToDecimal(sourceBase, inputs[0]);
             StringBuilder targetResult = new StringBuilder(convertDecimalToTarget(targetBase, decimalResult));
 
+            if (targetResult.length() == 0) {
+                targetResult.append("0");
+            }
+
             if (inputs.length > 1) {
                 BigDecimal fractionResult = convertSourceToDecimalFraction(sourceBase, inputs[1]);
                 targetResult.append(".").append(convertDecimalFractionToTarget(targetBase, fractionResult));
