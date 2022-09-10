@@ -1,6 +1,7 @@
 package org.project;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner;
 
 public class Main {
@@ -111,7 +112,7 @@ public class Main {
             }
 
             BigDecimal divider = BigDecimal.valueOf(source).pow(i + 1);
-            BigDecimal result = BigDecimal.valueOf(digit).divide(divider);
+            BigDecimal result = BigDecimal.valueOf(digit).divide(divider, 10, RoundingMode.CEILING);
             sum = sum.add(result);
         }
 
@@ -135,7 +136,7 @@ public class Main {
         while (!number.equals(BigDecimal.ZERO)) {
             int digit = number.remainder(BigDecimal.valueOf(targetBase)).intValue();
             builder.append(formatNumber(digit));
-            number = number.divide(BigDecimal.valueOf(targetBase));
+            number = number.divide(BigDecimal.valueOf(targetBase), 10, RoundingMode.CEILING);
         }
 
         return new BigDecimal(builder.reverse().toString());
@@ -150,6 +151,10 @@ public class Main {
 
             if (number.compareTo(BigDecimal.valueOf(digit)) >= 0) {
                 number = number.subtract(BigDecimal.valueOf(digit));
+            }
+
+            if (builder.length() == 7) {
+                break;
             }
         }
 
