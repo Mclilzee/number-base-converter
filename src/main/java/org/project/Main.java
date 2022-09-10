@@ -14,9 +14,9 @@ public class Main {
     private static void userAction() {
         while (true) {
             System.out.print("Enter two numbers in format: {source base} {target base} (To quit type /exit) ");
-            String[] inputs = scanner.nextLine().toUpperCase().split(" ");
+            String[] inputs = scanner.nextLine().toLowerCase().split(" ");
 
-            if (inputs[0].equals("/EXIT")) {
+            if (inputs[0].equals("/exit")) {
                 break;
             }
 
@@ -48,7 +48,7 @@ public class Main {
             System.out.printf("Enter number in base %d to convert to base %d (To go back type /back) ", sourceBase, targetBase);
             String input = scanner.nextLine().toLowerCase();
 
-            if ("/BACK".equals(input)) {
+            if ("/back".equals(input)) {
                 break;
             }
 
