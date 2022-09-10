@@ -62,10 +62,7 @@ public class Main {
     }
 
     private static void printConversion(int sourceBase, int targetBase, String input) {
-        if (input.contains(".")) {
-            String[] newInput = input.split("\\.");
-            System.out.println(convertDecimalFractionToTarget(targetBase, newInput[1]));
-        }
+        String[] inputs = input.split("\\.");
 
         try {
             BigInteger decimalResult = convertSourceToDecimal(sourceBase, input);
@@ -94,6 +91,23 @@ public class Main {
         return sum;
     }
 
+    private static BigDecimal convertSourceToDecimalFraction(int source, String number) {
+        BigInteger sum = BigInteger.ZERO;
+
+        for (int i = 0; i < number.length(); i++) {
+            int digit = getDigit(number, i);
+
+            if (digit >= source) {
+                throw new NumberFormatException();
+            }
+
+            BigInteger divider = BigInteger.valueOf(source).pow(i + 1);
+            sum = sum.add(BigInteger.valueOf(digit)).divide(divider);
+        }
+
+        return new BigDecimal("0." + sum);
+    }
+
     private static int getDigit(String number, int i) {
         char digitChar = number.charAt(number.length() - 1 - i);
         int digit;
@@ -117,18 +131,15 @@ public class Main {
         return new BigInteger(builder.reverse().toString());
     }
 
-    private static BigDecimal convertDecimalFractionToTarget(int target, String numberString) {
-        BigDecimal number = new BigDecimal("0." + numberString);
-        BigDecimal targetBase = BigDecimal.valueOf(target);
+    private static BigDecimal convertDecimalFractionToTarget(int targetBase, BigDecimal number) {
         StringBuilder builder = new StringBuilder("0.");
-
         while (!number.stripTrailingZeros().equals(BigDecimal.ZERO)) {
-            number = number.multiply(targetBase);
-            BigDecimal digit = number.setScale(0, RoundingMode.FLOOR);
-            builder.append(digit);
+            number = number.multiply(BigDecimal.valueOf(targetBase));
+            int digit = number.intValue();
+            builder.append(formatNumber(digit));
 
-            if (number.compareTo(digit) >= 0) {
-                number = number.subtract(digit);
+            if (number.compareTo(BigDecimal.valueOf(digit)) >= 0) {
+                number = number.subtract(BigDecimal.valueOf(digit));
             }
         }
 
