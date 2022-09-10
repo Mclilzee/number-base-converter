@@ -2,7 +2,6 @@ package org.project;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.math.BigInteger;
 import java.util.Scanner;
 
 public class Main {
@@ -65,16 +64,24 @@ public class Main {
         String[] inputs = input.split("\\.");
 
         try {
-            BigInteger decimalResult = convertSourceToDecimal(sourceBase, input);
-            BigInteger result = convertDecimalToTarget(targetBase, decimalResult);
-            System.out.printf("Conversion result: %s\n\n", result);
+            BigDecimal decimalResult = convertSourceToDecimal(sourceBase, inputs[0]);
+            BigDecimal targetResult = convertDecimalToTarget(targetBase, decimalResult);
+
+            if (inputs.length > 1) {
+                BigDecimal fractionResult = convertSourceToDecimalFraction(sourceBase, inputs[1]);
+                BigDecimal fractionTargetResult = convertDecimalFractionToTarget(targetBase, fractionResult);
+
+                targetResult = targetResult.add(fractionTargetResult);
+            }
+
+            System.out.printf("Conversion result: %s\n\n", targetResult);
         } catch (NumberFormatException e) {
             System.out.println("Wrong number provided for given source base!");
         }
     }
 
-    private static BigInteger convertSourceToDecimal(int source, String number) {
-        BigInteger sum = BigInteger.ZERO;
+    private static BigDecimal convertSourceToDecimal(int source, String number) {
+        BigDecimal sum = BigDecimal.ZERO;
 
         for (int i = 0; i < number.length(); i++) {
             int digit = getDigit(number, i);
@@ -82,8 +89,8 @@ public class Main {
             if (digit >= source) {
                 throw new NumberFormatException();
             }
-            BigInteger exponent = BigInteger.valueOf(source).pow(i);
-            BigInteger multipliedNumber = BigInteger.valueOf(digit).multiply(exponent);
+            BigDecimal exponent = BigDecimal.valueOf(source).pow(i);
+            BigDecimal multipliedNumber = BigDecimal.valueOf(digit).multiply(exponent);
 
             sum = sum.add(multipliedNumber);
         }
@@ -92,7 +99,7 @@ public class Main {
     }
 
     private static BigDecimal convertSourceToDecimalFraction(int source, String number) {
-        BigInteger sum = BigInteger.ZERO;
+        BigDecimal sum = BigDecimal.ZERO;
 
         for (int i = 0; i < number.length(); i++) {
             int digit = getDigit(number, i);
@@ -101,8 +108,8 @@ public class Main {
                 throw new NumberFormatException();
             }
 
-            BigInteger divider = BigInteger.valueOf(source).pow(i + 1);
-            sum = sum.add(BigInteger.valueOf(digit)).divide(divider);
+            BigDecimal divider = BigDecimal.valueOf(source).pow(i + 1);
+            sum = sum.add(BigDecimal.valueOf(digit)).divide(divider, RoundingMode.HALF_EVEN);
         }
 
         return new BigDecimal("0." + sum);
@@ -120,15 +127,15 @@ public class Main {
         return digit;
     }
 
-    private static BigInteger convertDecimalToTarget(int targetBase, BigInteger number) {
+    private static BigDecimal convertDecimalToTarget(int targetBase, BigDecimal number) {
         StringBuilder builder = new StringBuilder();
-        while (!number.equals(BigInteger.ZERO)) {
-            int digit = number.remainder(BigInteger.valueOf(targetBase)).intValue();
+        while (!number.equals(BigDecimal.ZERO)) {
+            int digit = number.remainder(BigDecimal.valueOf(targetBase)).intValue();
             builder.append(formatNumber(digit));
-            number = number.divide(BigInteger.valueOf(targetBase));
+            number = number.divide(BigDecimal.valueOf(targetBase), RoundingMode.HALF_EVEN);
         }
 
-        return new BigInteger(builder.reverse().toString());
+        return new BigDecimal(builder.reverse().toString());
     }
 
     private static BigDecimal convertDecimalFractionToTarget(int targetBase, BigDecimal number) {
