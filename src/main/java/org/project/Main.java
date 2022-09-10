@@ -84,6 +84,7 @@ public class Main {
 
     private static BigDecimal convertSourceToDecimal(int source, String number) {
         BigDecimal sum = BigDecimal.ZERO;
+        BigDecimal exponent;
 
         for (int i = 0; i < number.length(); i++) {
             int digit = getDigit(number, number.length() - 1 - i);
@@ -91,10 +92,9 @@ public class Main {
             if (digit >= source) {
                 throw new NumberFormatException();
             }
-            BigDecimal exponent = BigDecimal.valueOf(source).pow(i);
-            BigDecimal multipliedNumber = BigDecimal.valueOf(digit).multiply(exponent);
+            exponent = BigDecimal.valueOf(source).pow(i);
 
-            sum = sum.add(multipliedNumber);
+            sum = sum.add(BigDecimal.valueOf(digit).multiply(exponent));
         }
 
         return sum;
@@ -102,6 +102,7 @@ public class Main {
 
     private static BigDecimal convertSourceToDecimalFraction(int source, String number) {
         BigDecimal sum = BigDecimal.ZERO;
+        BigDecimal divider;
 
         for (int i = 0; i < number.length(); i++) {
             int digit = getDigit(number, i);
@@ -110,9 +111,8 @@ public class Main {
                 throw new NumberFormatException();
             }
 
-            BigDecimal divider = BigDecimal.valueOf(source).pow(i + 1);
-            BigDecimal result = BigDecimal.valueOf(digit).divide(divider, RoundingMode.HALF_UP);
-            sum = sum.add(result);
+            divider = BigDecimal.valueOf(source).pow(i + 1);
+            sum = sum.add(BigDecimal.valueOf(digit).divide(divider, RoundingMode.HALF_UP));
         }
 
         return sum;
@@ -132,10 +132,10 @@ public class Main {
 
     private static String convertDecimalToTarget(int targetBase, BigDecimal number) {
         StringBuilder builder = new StringBuilder();
-        while (!number.stripTrailingZeros().equals(BigDecimal.ZERO)) {
+        while (number.compareTo(BigDecimal.ZERO) != 0) {
             int digit = number.remainder(BigDecimal.valueOf(targetBase)).intValue();
             builder.append(formatNumber(digit));
-            number = number.divide(BigDecimal.valueOf(targetBase), RoundingMode.HALF_UP);
+            number = number.divide(BigDecimal.valueOf(targetBase), RoundingMode.FLOOR);
         }
 
         return builder.reverse().toString();
