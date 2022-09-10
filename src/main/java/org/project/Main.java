@@ -112,7 +112,7 @@ public class Main {
             }
 
             BigDecimal divider = BigDecimal.valueOf(source).pow(i + 1);
-            BigDecimal result = BigDecimal.valueOf(digit).divide(divider, 10, RoundingMode.CEILING);
+            BigDecimal result = BigDecimal.valueOf(digit).divide(divider, 5, RoundingMode.FLOOR);
             sum = sum.add(result);
         }
 
@@ -133,10 +133,10 @@ public class Main {
 
     private static BigDecimal convertDecimalToTarget(int targetBase, BigDecimal number) {
         StringBuilder builder = new StringBuilder();
-        while (!number.equals(BigDecimal.ZERO)) {
+        while (!number.stripTrailingZeros().equals(BigDecimal.ZERO)) {
             int digit = number.remainder(BigDecimal.valueOf(targetBase)).intValue();
             builder.append(formatNumber(digit));
-            number = number.divide(BigDecimal.valueOf(targetBase), 10, RoundingMode.CEILING);
+            number = number.divide(BigDecimal.valueOf(targetBase), RoundingMode.FLOOR);
         }
 
         return new BigDecimal(builder.reverse().toString());
