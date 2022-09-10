@@ -1,7 +1,6 @@
 package org.project;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Scanner;
 
 public class Main {
@@ -62,10 +61,13 @@ public class Main {
 
     private static void printConversion(int sourceBase, int targetBase, String input) {
         String[] inputs = input.split("\\.");
+        BigDecimal targetResult = BigDecimal.ZERO;
 
         try {
-            BigDecimal decimalResult = convertSourceToDecimal(sourceBase, inputs[0]);
-            BigDecimal targetResult = convertDecimalToTarget(targetBase, decimalResult);
+            if (!"0".equalsIgnoreCase(inputs[0])) {
+                BigDecimal decimalResult = convertSourceToDecimal(sourceBase, inputs[0]);
+                targetResult = convertDecimalToTarget(targetBase, decimalResult);
+            }
 
             if (inputs.length > 1) {
                 BigDecimal fractionResult = convertSourceToDecimalFraction(sourceBase, inputs[1]);
@@ -84,7 +86,7 @@ public class Main {
         BigDecimal sum = BigDecimal.ZERO;
 
         for (int i = 0; i < number.length(); i++) {
-            int digit = getDigit(number, i);
+            int digit = getDigit(number, number.length() - 1 - i);
 
             if (digit >= source) {
                 throw new NumberFormatException();
@@ -109,14 +111,15 @@ public class Main {
             }
 
             BigDecimal divider = BigDecimal.valueOf(source).pow(i + 1);
-            sum = sum.add(BigDecimal.valueOf(digit)).divide(divider, RoundingMode.HALF_EVEN);
+            BigDecimal result = BigDecimal.valueOf(digit).divide(divider);
+            sum = sum.add(result);
         }
 
-        return new BigDecimal("0." + sum);
+        return sum;
     }
 
     private static int getDigit(String number, int i) {
-        char digitChar = number.charAt(number.length() - 1 - i);
+        char digitChar = number.charAt(i);
         int digit;
 
         if (digitChar >= 'A') {
@@ -132,7 +135,7 @@ public class Main {
         while (!number.equals(BigDecimal.ZERO)) {
             int digit = number.remainder(BigDecimal.valueOf(targetBase)).intValue();
             builder.append(formatNumber(digit));
-            number = number.divide(BigDecimal.valueOf(targetBase), RoundingMode.HALF_EVEN);
+            number = number.divide(BigDecimal.valueOf(targetBase));
         }
 
         return new BigDecimal(builder.reverse().toString());
