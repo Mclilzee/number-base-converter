@@ -62,13 +62,10 @@ public class Main {
 
     private static void printConversion(int sourceBase, int targetBase, String input) {
         String[] inputs = input.split("\\.");
-        StringBuilder targetResult = new StringBuilder("0");
 
         try {
-            if (!"0".equalsIgnoreCase(inputs[0])) {
-                BigDecimal decimalResult = convertSourceToDecimal(sourceBase, inputs[0]);
-                targetResult = new StringBuilder(convertDecimalToTarget(targetBase, decimalResult));
-            }
+            BigDecimal decimalResult = convertSourceToDecimal(sourceBase, inputs[0]);
+            StringBuilder targetResult = new StringBuilder(convertDecimalToTarget(targetBase, decimalResult));
 
             if (inputs.length > 1) {
                 BigDecimal fractionResult = convertSourceToDecimalFraction(sourceBase, inputs[1]);
@@ -142,17 +139,13 @@ public class Main {
 
     private static String convertDecimalFractionToTarget(int targetBase, BigDecimal number) {
         StringBuilder builder = new StringBuilder();
-        while (!number.stripTrailingZeros().equals(BigDecimal.ZERO)) {
+        while (builder.length() < 5) {
             number = number.multiply(BigDecimal.valueOf(targetBase));
             int digit = number.intValue();
             builder.append(formatNumber(digit));
 
             if (number.compareTo(BigDecimal.valueOf(digit)) >= 0) {
                 number = number.subtract(BigDecimal.valueOf(digit));
-            }
-
-            if (builder.length() == 5) {
-                break;
             }
         }
 
