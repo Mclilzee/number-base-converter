@@ -46,13 +46,13 @@ public class Main {
     private static void convertFromSourceToTarget(int sourceBase, int targetBase) {
         while (true) {
             System.out.printf("Enter number in base %d to convert to base %d (To go back type /back) ", sourceBase, targetBase);
-            String input = scanner.nextLine().toUpperCase();
+            String input = scanner.nextLine().toLowerCase();
 
             if ("/BACK".equals(input)) {
                 break;
             }
 
-            if (input.matches("(\\d|[A-Z])+(\\.(\\d|[A-Z])+)?")) {
+            if (input.matches("(\\d|[a-z])+(\\.(\\d|[a-z])+)?")) {
                 printConversion(sourceBase, targetBase, input);
             } else {
                 System.out.println("Incorrect Number format");
@@ -122,7 +122,7 @@ public class Main {
         int digit;
 
         if (digitChar >= 'A') {
-            digit = digitChar - 55;
+            digit = digitChar - 87;
         } else {
             digit = Integer.parseInt(String.valueOf(digitChar));
         }
@@ -151,7 +151,7 @@ public class Main {
                 number = number.subtract(BigDecimal.valueOf(digit));
             }
 
-            if (builder.length() == 7) {
+            if (builder.length() == 5) {
                 break;
             }
         }
@@ -162,7 +162,7 @@ public class Main {
     private static String formatNumber(int number) {
 
         if (number >= 10) {
-            return String.valueOf((char) (number + 55));
+            return String.valueOf((char) (number + 87));
         }
 
         return String.valueOf(number);
