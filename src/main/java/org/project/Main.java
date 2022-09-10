@@ -62,9 +62,14 @@ public class Main {
     }
 
     private static void printConversion(int sourceBase, int targetBase, String input) {
+        if (input.contains(".")) {
+            String[] newInput = input.split("\\.");
+            System.out.println(convertDecimalFractionToTarget(targetBase, newInput[1]));
+        }
+
         try {
             BigInteger decimalResult = convertSourceToDecimal(sourceBase, input);
-            String result = convertDecimalToTarget(targetBase, decimalResult);
+            BigInteger result = convertDecimalToTarget(targetBase, decimalResult);
             System.out.printf("Conversion result: %s\n\n", result);
         } catch (NumberFormatException e) {
             System.out.println("Wrong number provided for given source base!");
@@ -89,25 +94,6 @@ public class Main {
         return sum;
     }
 
-    private static BigDecimal convertSourceToFraction(int source, String numberString) {
-        BigDecimal number = new BigDecimal("0." + numberString);
-        BigDecimal sourceDecimal = BigDecimal.valueOf(source);
-        BigInteger sum = BigInteger.ZERO;
-
-        while (!number.equals(BigDecimal.ZERO)) {
-            number = number.multiply(sourceDecimal);
-            BigDecimal digit = number.setScale(0, RoundingMode.UNNECESSARY);
-            sum = sum.add(new BigInteger(digit.toString()));
-
-            if (number.compareTo(digit) >= 0) {
-                number = number.subtract(digit);
-            }
-        }
-
-        return new BigDecimal("0." + sum);
-    }
-
-
     private static int getDigit(String number, int i) {
         char digitChar = number.charAt(number.length() - 1 - i);
         int digit;
@@ -120,7 +106,7 @@ public class Main {
         return digit;
     }
 
-    private static String convertDecimalToTarget(int targetBase, BigInteger number) {
+    private static BigInteger convertDecimalToTarget(int targetBase, BigInteger number) {
         StringBuilder builder = new StringBuilder();
         while (!number.equals(BigInteger.ZERO)) {
             int digit = number.remainder(BigInteger.valueOf(targetBase)).intValue();
@@ -128,7 +114,25 @@ public class Main {
             number = number.divide(BigInteger.valueOf(targetBase));
         }
 
-        return builder.reverse().toString();
+        return new BigInteger(builder.reverse().toString());
+    }
+
+    private static BigDecimal convertDecimalFractionToTarget(int target, String numberString) {
+        BigDecimal number = new BigDecimal("0." + numberString);
+        BigDecimal targetBase = BigDecimal.valueOf(target);
+        StringBuilder builder = new StringBuilder("0.");
+
+        while (!number.stripTrailingZeros().equals(BigDecimal.ZERO)) {
+            number = number.multiply(targetBase);
+            BigDecimal digit = number.setScale(0, RoundingMode.FLOOR);
+            builder.append(digit);
+
+            if (number.compareTo(digit) >= 0) {
+                number = number.subtract(digit);
+            }
+        }
+
+        return new BigDecimal(builder.toString());
     }
 
     private static String formatNumber(int number) {
