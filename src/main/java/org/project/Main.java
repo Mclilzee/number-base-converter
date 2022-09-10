@@ -112,7 +112,7 @@ public class Main {
             }
 
             divider = BigDecimal.valueOf(source).pow(i + 1);
-            sum = sum.add(BigDecimal.valueOf(digit).divide(divider, RoundingMode.HALF_UP));
+            sum = sum.add(BigDecimal.valueOf(digit).divide(divider, 10, RoundingMode.HALF_UP));
         }
 
         return sum;
