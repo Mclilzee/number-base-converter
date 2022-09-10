@@ -1,5 +1,7 @@
 package org.project;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.math.BigInteger;
 import java.util.Scanner;
 
@@ -87,6 +89,25 @@ public class Main {
         return sum;
     }
 
+    private static BigDecimal convertSourceToFraction(int source, String numberString) {
+        BigDecimal number = new BigDecimal("0." + numberString);
+        BigDecimal sourceDecimal = BigDecimal.valueOf(source);
+        BigInteger sum = BigInteger.ZERO;
+
+        while (!number.equals(BigDecimal.ZERO)) {
+            number = number.multiply(sourceDecimal);
+            BigDecimal digit = number.setScale(0, RoundingMode.UNNECESSARY);
+            sum = sum.add(new BigInteger(digit.toString()));
+
+            if (number.compareTo(digit) >= 0) {
+                number = number.subtract(digit);
+            }
+        }
+
+        return new BigDecimal("0." + sum);
+    }
+
+
     private static int getDigit(String number, int i) {
         char digitChar = number.charAt(number.length() - 1 - i);
         int digit;
@@ -103,14 +124,14 @@ public class Main {
         StringBuilder builder = new StringBuilder();
         while (!number.equals(BigInteger.ZERO)) {
             int digit = number.remainder(BigInteger.valueOf(targetBase)).intValue();
-            builder.append(formatNumber(digit, targetBase));
+            builder.append(formatNumber(digit));
             number = number.divide(BigInteger.valueOf(targetBase));
         }
 
         return builder.reverse().toString();
     }
 
-    private static String formatNumber(int number, int base) {
+    private static String formatNumber(int number) {
 
         if (number >= 10) {
             return String.valueOf((char) (number + 55));
