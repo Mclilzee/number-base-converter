@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'application'
 }
 
 group 'org.example'
@@ -18,8 +18,10 @@ test {
     useJUnitPlatform()
 }
 
-jar {
-    manifest {
-        attributes('Main-Class': "org.project.Main")
-    }
+application {
+    mainClass = "org.project.Main"
+}
+
+run {
+    standardInput = System.in
 }
